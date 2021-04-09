@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://localhost/playground")
+  .connect("mongodb://localhost/playground", { useNewUrlParser: true,useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error("Could not connect to MongoDB...", err));
 
@@ -41,8 +41,22 @@ async function getCourse() {
     .limit(10)
     .sort({ name: 1 })
     .select({ name: 1, tags: 1 })
-    .count()
+    .countDocuments()
   console.log("course", courses);
 }
+ // update a course
+ async function updateCourse(id){
+   const course = await Course.findById(id);
+   if(!course) {
+     console.error('No this course!')
+     return;}
+   course.isPublished = true;
+   course.author = 'new author';
+   const result = await course.save();
+   console.log(result);
+ }
+ updateCourse('606c5db85f5a421446507ac7');
 //createCourse();
-getCourse();
+// getCourse();
+
+
