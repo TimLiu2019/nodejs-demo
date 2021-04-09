@@ -41,10 +41,21 @@ mongoose
     
     // cources including backend or frontend: $in:[]
     // price in descending order, from big to small or use or
+  //   const courses = await Course
+  //  // .find({ tags:  {$in:['backend','frontend']}, isPublished: true })
+  //   .find({isPublished: true })
+  //   .or ([{tags:'backend'},{tags:'frontend'}])
+  //   .limit(10)
+  //   .sort({ price: -1 })
+  //   .select({ name: 1, author: 1 ,price:1})
+  //   console.log("course", courses);
+
+    // get all courses that are $15 or more 
+    // or have the word  'by' in their title
+    // price in descending order, from big to small or use or
     const courses = await Course
-   // .find({ tags:  {$in:['backend','frontend']}, isPublished: true })
-    .find({isPublished: true })
-    .or ([{tags:'backend'},{tags:'frontend'}])
+    .find({isPublished:true})
+    .or ([{price: {$gte:15}},{name: /.*by.*/}])
     .limit(10)
     .sort({ price: -1 })
     .select({ name: 1, author: 1 ,price:1})
