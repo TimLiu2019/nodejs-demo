@@ -9,7 +9,7 @@ mongoose
   const courseSchema = new mongoose.Schema({
     name: String,
     author: String,
-    tags: [String, String],
+    tags: [ String],
     data: { type: Date, default: Date.now },
     isPublished: Boolean,
     price: Number,
@@ -31,13 +31,23 @@ mongoose
     //in
     // nin (notin)
     // .find ({price: {$gte:10, $lte:20}})
+
+    // get backend and published
+    // const courses = await Course
+    //   .find({ tags: "backend", isPublished: true })
+    //   .limit(10)
+    //   .sort({ name: 1 })
+    //   .select({ name: 1, author: 1 })
+    
+    // cources including backend or frontend: $in:[]
+    // price in descending order, from big to small or use or
     const courses = await Course
-      .find({ tags: "backend", isPublished: true })
-     // .find()
-     // .or ([{author:'Tom'}, {isPublished:true}])
-      .limit(10)
-      .sort({ name: 1 })
-      .select({ name: 1, author: 1 })
+   // .find({ tags:  {$in:['backend','frontend']}, isPublished: true })
+    .find({isPublished: true })
+    .or ([{tags:'backend'},{tags:'frontend'}])
+    .limit(10)
+    .sort({ price: -1 })
+    .select({ name: 1, author: 1 ,price:1})
     console.log("course", courses);
   }
   //createCourse();
