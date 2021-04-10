@@ -12,7 +12,7 @@ mongoose
     tags: [ String],
     data: { type: Date, default: Date.now },
     isPublished: Boolean,
-    price: Number,
+    price: {type: Number, required: function(){this.isPublished}},
     __v: Number
 
   });
