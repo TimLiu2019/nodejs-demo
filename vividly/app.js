@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
 const genres = require("./routes/genres");
+const customers= require("./routes/customers");
 app.use(express.json());
 app.use('/api/genres',genres);
+app.use('/api/customers',customers);
 
 mongoose.connect('mongodb://localhost/vividly', {
     useNewUrlParser: true,
