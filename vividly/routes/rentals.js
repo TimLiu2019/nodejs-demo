@@ -16,7 +16,6 @@ router.post("/", async (req, res) => {
   const result = validateRental(req.body);
   if (result.error)
     return res.status(404).send(result.error.details[0].message);
-
   const customer = await Customer.findById(req.body.customerId);
   if (!customer) return res.status(400).send("Invalid customer.");
 
