@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   const result = validate(req.body);
   if (result.error) return res.status(404).send(result.error);
   console.log(result.error);
-
+  const bcrypt = require("bcrypt");
   let user = await User.findOne({ email: req.body.emal });
   if (user) return res.status(400).send("User already registered.");
   //    user = new User({
@@ -23,6 +23,8 @@ router.post("/", async (req, res) => {
   //   });
   // or use pick
   user = new User(_.pick(req.body, ["name", "email", "password"]));
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
   user = await user.save();
   res.send(_.pick(user, ["_id", "name", "email"]));
 });
