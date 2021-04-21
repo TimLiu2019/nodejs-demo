@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const config = require('config');
 const Joi = require("joi");
 Joi.objectId = require('joi-objectid')(Joi);
 const express = require("express");
@@ -16,6 +17,11 @@ app.use("/api/movies", movies);
 app.use("/api/rentals", rentals);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+
+if(!config.get('jwtPrivateKey')) {
+  console.error('jwtPrivateKey is not defined.');
+  process.exit(1);
+}
 
 mongoose
   .connect("mongodb://localhost/vividly", {
