@@ -1,4 +1,3 @@
-const asyncMiddleware = require('../middleware/async');
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
@@ -7,20 +6,18 @@ const admin = require("../middleware/admin");
 const { Genre, validate } = require("../models/genre");
 
 router.get(
-  "/",
-  asyncMiddleware(async (req, res) => {
+  "/",async (req, res) => {
     const genres = await Genre.find().sort("name");
     res.send(genres);
-  })
-);
-router.get("/:id", asyncMiddleware( async (req, res) => {
+  });
+router.get("/:id",  async (req, res) => {
   const genre = await Genre.findByIdAndUpdate(req.params.id);
   //  const genre = genres.find(g => g.id === parseInt(req.params.id));
   if (!genre)
     return res.status(404).send("The genre with given id was not found");
 
   res.send(genre);
-}));
+});
 
 router.post("/", auth, async (req, res) => {
   const result = validate(req.body);
