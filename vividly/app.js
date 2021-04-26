@@ -1,11 +1,11 @@
-require('express-async-errors');
-const winston = require('winston');
-require('winston-mongodb');
-const error = require('./middleware/error');
+require("express-async-errors");
+const winston = require("winston");
+require("winston-mongodb");
+const error = require("./middleware/error");
 const mongoose = require("mongoose");
-const config = require('config');
+const config = require("config");
 const Joi = require("joi");
-Joi.objectId = require('joi-objectid')(Joi);
+Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
 const app = express();
 const genres = require("./routes/genres");
@@ -23,11 +23,19 @@ app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use(error);
 
- winston.add(new winston.transports.File({ filename: 'logfile.log' }));
- winston.add(new winston.transports.MongoDB({db: 'mongodb://localhost/vividly'}));
+process.on('uncaughtException',ex =>{
+  console.log('We got an uncaught exception');
+  winston.error(ex.message, ex);
+});
 
-if(!config.get('jwtPrivateKey')) {
-  console.error('jwtPrivateKey is not defined.');
+winston.add(new winston.transports.File({ filename: "logfile.log" }));
+winston.add(
+  new winston.transports.MongoDB({ db: "mongodb://localhost/vividly" })
+);
+
+throw new Error("Something failed during startup");
+if (!config.get("jwtPrivateKey")) {
+  console.error("jwtPrivateKey is not defined.");
   process.exit(1);
 }
 
