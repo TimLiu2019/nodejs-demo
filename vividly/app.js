@@ -23,17 +23,27 @@ app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use(error);
 
-process.on('uncaughtException',ex =>{
-  console.log('We got an uncaught exception');
+// process.on('uncaughtException',ex =>{
+//   console.log('We got an uncaught exception');
+//   winston.error(ex.message, ex);
+//   process.exit(1);
+// });
+
+winston.handleExceptions( new winston.transports.File({filename: 'uncaughtExceptions.log'}));
+process.on('unhandledRejection ',ex =>{
+  console.log('We got an unhandled rejection');
   winston.error(ex.message, ex);
+  process.exit(1);
 });
 
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
 winston.add(
-  new winston.transports.MongoDB({ db: "mongodb://localhost/vividly" })
+  new winston.transports.MongoDB({ db: "mongodb://localhost/vividly" , level: 'info'})
 );
 
-throw new Error("Something failed during startup");
+//throw new Error("Something failed during startup");
+const p = Promise.reject(new Error('Something failed miseably!'));
+p.then(( )=>console.log('Done'));
 if (!config.get("jwtPrivateKey")) {
   console.error("jwtPrivateKey is not defined.");
   process.exit(1);
