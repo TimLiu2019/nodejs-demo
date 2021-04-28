@@ -5,7 +5,8 @@ module.exports = function() {
     .connect("mongodb://localhost/vividly", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: false
+      useFindAndModify: false,
+      useCreateIndex: true
     })
     .then(() => logger.info("Connected to Mongodb ..."))
     .catch(() => console.error("Could not connect to mongodb"));

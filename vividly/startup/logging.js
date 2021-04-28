@@ -12,6 +12,10 @@ module.exports = function() {
     process.exit(1);
   });
 
+  process.on('warning', (warning) => {
+    console.log(warning.stack);
+});
+
   //   const logger = winston.createLogger({
   //     level: "info",
   //     format: winston.format.json(),
