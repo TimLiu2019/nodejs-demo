@@ -1,8 +1,8 @@
 ### Introduction
 
-NODEJS-demo has four folders:
+NODEJS-projects has four projects:
 
-1. async-demo: promise
-2. mongo-demo: CRUD to mongodb using mongoose
-3. vividly: a project based on mongodb
+1. vividly: a backend project for a movie store based on mongodb
+2. async-demo: promise related operations
+3. mongo-demo: CRUD to mongodb using mongoose
 4. modellingRelationship: modelling relationships between connected data
