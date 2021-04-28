@@ -1,4 +1,4 @@
-const winston = require('winston');
+const logger = require('./startup/logger');
 const express = require("express");
 const app = express();
 
@@ -18,4 +18,4 @@ require("./startup/validation")();
 // p.then(() => console.log("Done"));
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => winston.info(` Listening on port ${port}...`));
+app.listen(port, () => logger.info(` Listening on port ${port}...`));

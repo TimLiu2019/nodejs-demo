@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const winston = require("winston");
+const logger = require("./logger");
 module.exports = function() {
   mongoose
     .connect("mongodb://localhost/vividly", {
@@ -7,6 +7,6 @@ module.exports = function() {
       useUnifiedTopology: true,
       useFindAndModify: false
     })
-    .then(() => winston.info("Connected to Mongodb ..."))
+    .then(() => logger.info("Connected to Mongodb ..."))
     .catch(() => console.error("Could not connect to mongodb"));
 };
