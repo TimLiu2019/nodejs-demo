@@ -4,6 +4,7 @@ require("express-async-errors");
 
 module.exports = function() {
   winston.handleExceptions(
+    new winston.transports.Console({ colorize: true, prettyPrint: true }),
     new winston.transports.File({ filename: "uncaughtExceptions.log" })
   );
   process.on("unhandledRejection ", ex => {
@@ -12,10 +13,9 @@ module.exports = function() {
     process.exit(1);
   });
 
-  process.on('warning', (warning) => {
+  process.on("warning", warning => {
     console.log(warning.stack);
-});
-
+  });
   //   const logger = winston.createLogger({
   //     level: "info",
   //     format: winston.format.json(),
