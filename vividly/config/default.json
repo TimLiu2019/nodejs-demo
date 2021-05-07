@@ -1,4 +1,6 @@
 {
-    "jwtPrivateKey" : "",
-    "db": "mongodb://localhost/vividly"
+  "jwtPrivateKey": "temKey",
+  "db": "mongodb://localhost/vividly",
+  "requiresAuth": false,
+  "port": "3900"
 }

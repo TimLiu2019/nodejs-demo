@@ -1,6 +1,7 @@
 const logger = require('./startup/logger');
 const express = require("express");
 const app = express();
+const config = require("config");
 
 require("./startup/logging")();
 require("./startup/routes")(app);
@@ -17,6 +18,6 @@ require("./startup/validation")();
 // const p = Promise.reject(new Error("Something failed miseably!"));
 // p.then(() => console.log("Done"));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || config.get("port");
 const server = app.listen(port, () => logger.info(` Listening on port ${port}...`));
 module.exports = server;
