@@ -1,14 +1,14 @@
 const express = require("express");
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 const router = express.Router();
 const Joi = require("joi");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
-const jwt = require('jsonwebtoken');
-const config = require('config');
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 router.get("/me", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
+  const user = await User.findById(req.user._id).select("-password");
   res.send(user);
 });
 
@@ -31,7 +31,10 @@ router.post("/", async (req, res) => {
   user = await user.save();
   const token = user.generateAuthToken();
   //const token = jwt.sign({_id: user._id}, config.get('jwtPrivateKey'));
-  res.header('x-auth-token',token).send(_.pick(user, ["_id", "name", "email"]));
+  res
+    .header("x-auth-token", token)
+    .header("access-control-expose-headers", "x-auth-token")
+    .send(_.pick(user, ["_id", "name", "email"]));
 });
 
 module.exports = router;

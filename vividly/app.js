@@ -1,9 +1,10 @@
-const logger = require('./startup/logger');
+const logger = require("./startup/logger");
 const express = require("express");
 const app = express();
 const config = require("config");
 
 require("./startup/logging")();
+require("./startup/cors")(app);
 require("./startup/routes")(app);
 require("./startup/db")();
 require("./startup/config")();
@@ -19,5 +20,7 @@ require("./startup/validation")();
 // p.then(() => console.log("Done"));
 
 const port = process.env.PORT || config.get("port");
-const server = app.listen(port, () => logger.info(` Listening on port ${port}...`));
+const server = app.listen(port, () =>
+  logger.info(` Listening on port ${port}...`)
+);
 module.exports = server;
