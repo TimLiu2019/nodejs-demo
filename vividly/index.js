@@ -9,6 +9,7 @@ require("./startup/routes")(app);
 require("./startup/db")();
 require("./startup/config")();
 require("./startup/validation")();
+require("./startup/prod")(app);
 // process.on('uncaughtException',ex =>{
 //   console.log('We got an uncaught exception');
 //   winston.error(ex.message, ex);
