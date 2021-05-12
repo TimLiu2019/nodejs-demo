@@ -41,7 +41,8 @@ build/Release
 node_modules/
 mongo-demo/node_modules/
 jspm_packages/
-
+#coverage/
+coverage/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
