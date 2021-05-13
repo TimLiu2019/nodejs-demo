@@ -1,4 +1,6 @@
 {
   "jwtPrivateKey": "vividly_jwtPrivateKey",
-  "db": "vividly_db"
+  "db": "mongodb: //localhost/vividly",
+  "__ comment": "below for production",
+  "__comment": "db: vividly_db"
 }
