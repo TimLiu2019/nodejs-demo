@@ -22,7 +22,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   const result = validate(req.body);
-  if (result.error) return res.status(404).send(result.error);
+  if (result.error) return res.status(400).send(result.error);
   console.log(result.error);
   let genre = new Genre({ name: req.body.name });
   genre = await genre.save();
@@ -32,7 +32,7 @@ router.post("/", auth, async (req, res) => {
 router.put("/:id", async (req, res) => {
   const result = validate(req.body);
 
-  if (result.error) return res.status(404).send(result.error);
+  if (result.error) return res.status(400).send(result.error);
   // console.log(result.error.details);
 
   const genre = await Genre.findByIdAndUpdate(
