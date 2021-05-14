@@ -55,8 +55,19 @@ describe("api/genres", () => {
       const token = new User().generateAuthToken();
       const res = await request(server)
         .post("/api/genres")
-        .set('x-auth-token',token)
+        .set("x-auth-token", token)
         .send({ name: "1234" });
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 400 if genre is more than 50 characters", async () => {
+      const token = new User().generateAuthToken();
+      const name = new Array(52).join('a');
+      console.log('50 characters',name,name.length)
+      const res = await request(server)
+        .post("/api/genres")
+        .set("x-auth-token", token)
+        .send({ name: name });
       expect(res.status).toBe(400);
     });
   });
