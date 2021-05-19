@@ -138,5 +138,50 @@ describe("api/genres", () => {
 
       expect(res.status).toBe(401);
     });
+
+    it("should return 400 if genre is less than 5 characters", async () => {
+      newName = "1234";
+
+      const res = await exec();
+      // bad request
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 400 if genre is more than 50 characters", async () => {
+      newName = new Array(52).join("a");
+      console.log("50 characters", newName);
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 404 if id is invalid", async () => {
+      id = 1;
+
+      const res = await exec();
+
+      expect(res.status).toBe(404);
+    });
+
+    it("should return 404 if genre with the given id was not found", async () => {
+      id = mongoose.Types.ObjectId();
+
+      const res = await exec();
+
+      expect(res.status).toBe(404);
+    });
+
+    it("should update the genre if input is valid", async () => {
+      const res = await exec();
+
+      const updateGenre = await Genre.findById(genre._id);
+      expect(updateGenre.name).toBe(newName);
+    });
+
+    it("should return the updated genre if it is valid", async () => {
+      const res = await exec();
+
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body).toHaveProperty("name", newName);
+    });
   });
 });
