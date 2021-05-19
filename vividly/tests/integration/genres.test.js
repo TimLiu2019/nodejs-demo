@@ -51,24 +51,23 @@ describe("api/genres", () => {
     });
   });
 
-  // define the happy path, in each test,
-  // change one para that clearly aligns with the name of the test
-  let token;
-  let name;
-
-  const exec = async () => {
-    return await request(server)
-      .post("/api/genres")
-      .set("x-auth-token", token)
-      .send({ name });
-  };
-
-  beforeEach(() => {
-    token = new User().generateAuthToken();
-    name = "genre1";
-  });
-
   describe("POST /", () => {
+    // define the happy path, in each test,
+    // change one para that clearly aligns with the name of the test
+    let token;
+    let name;
+
+    const exec = async () => {
+      return await request(server)
+        .post("/api/genres")
+        .set("x-auth-token", token)
+        .send({ name });
+    };
+
+    beforeEach(() => {
+      token = new User().generateAuthToken();
+      name = "genre1";
+    });
     it("should return 401 if client is not logged in", async () => {
       token = "";
       const res = await exec();
@@ -105,6 +104,39 @@ describe("api/genres", () => {
 
       expect(res.body).toHaveProperty("_id");
       expect(res.body).toHaveProperty("name", "genre1");
+    });
+  });
+
+  describe("PUT /:id", () => {
+    let token;
+    let newName;
+    let genre;
+    let id;
+
+    const exec = async () => {
+      return await request(server)
+        .put("/api/genres/" + id)
+        .set("x-auth-token", token)
+        .send({ name: newName });
+    };
+
+    beforeEach(async () => {
+      // Before each test we need to create a genre and
+      // put it in the database.
+      genre = new Genre({ name: "genre1" });
+      await genre.save();
+
+      token = new User().generateAuthToken();
+      id = genre._id;
+      newName = "updatedName";
+    });
+
+    it("should return 401 if client is not logged in", async () => {
+      token = "";
+
+      const res = await exec();
+
+      expect(res.status).toBe(401);
     });
   });
 });
