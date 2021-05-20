@@ -217,5 +217,26 @@ describe("api/genres", () => {
       expect(res.status).toBe(403)
     })
 
+    it('should return 404 if no genre with the given id was found',async()=>{
+      id = mongoose.Types.ObjectId();
+      const res = await exec();
+      expect(res.status).toBe(404)
+    })
+
+    it('should delete the genre if input is valid', async () => {
+      await exec();
+
+      const genreInDb = await Genre.findById(id);
+
+      expect(genreInDb).toBeNull();
+    });
+
+    it('should return the removed genre', async () => {
+      const res = await exec();
+
+      expect(res.body).toHaveProperty('_id', genre._id.toHexString());
+      expect(res.body).toHaveProperty('name', genre.name);
+    });
+
   });
 });
