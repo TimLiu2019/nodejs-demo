@@ -8,7 +8,7 @@ describe("api/genres", () => {
     server = require("../../index");
   });
   afterEach(async () => {
-    server.close();
+    await server.close();
     //remove all
     await Genre.remove({});
   });
@@ -211,19 +211,19 @@ describe("api/genres", () => {
       expect(res.status).toBe(401);
     });
 
-    it('should return 403 if the user is not an admin',async()=>{
-      token = new User({isAdmin:false}).generateAuthToken();
+    it("should return 403 if the user is not an admin", async () => {
+      token = new User({ isAdmin: false }).generateAuthToken();
       const res = await exec();
-      expect(res.status).toBe(403)
-    })
+      expect(res.status).toBe(403);
+    });
 
-    it('should return 404 if no genre with the given id was found',async()=>{
+    it("should return 404 if no genre with the given id was found", async () => {
       id = mongoose.Types.ObjectId();
       const res = await exec();
-      expect(res.status).toBe(404)
-    })
+      expect(res.status).toBe(404);
+    });
 
-    it('should delete the genre if input is valid', async () => {
+    it("should delete the genre if input is valid", async () => {
       await exec();
 
       const genreInDb = await Genre.findById(id);
@@ -231,12 +231,11 @@ describe("api/genres", () => {
       expect(genreInDb).toBeNull();
     });
 
-    it('should return the removed genre', async () => {
+    it("should return the removed genre", async () => {
       const res = await exec();
 
-      expect(res.body).toHaveProperty('_id', genre._id.toHexString());
-      expect(res.body).toHaveProperty('name', genre.name);
+      expect(res.body).toHaveProperty("_id", genre._id.toHexString());
+      expect(res.body).toHaveProperty("name", genre.name);
     });
-
   });
 });
