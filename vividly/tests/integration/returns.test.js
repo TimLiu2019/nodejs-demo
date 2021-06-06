@@ -67,4 +67,20 @@ describe("/api/returns", () => {
 
     expect(res.status).toBe(400);
   });
+
+  it("should should return 404 if no rental found for the customer/movie", async () => {
+    await Rental.remove({});
+    const res = await exec();
+
+    expect(res.status).toBe(404);
+  });
+
+  it("should should return 400 if return is already processed", async () => {
+    rental.daterReturned = new Date();
+
+    await rental.save();
+    const res = await exec();
+
+    expect(res.status).toBe(400);
+  });
 });
