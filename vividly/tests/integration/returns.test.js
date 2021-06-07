@@ -43,7 +43,7 @@ describe("/api/returns", () => {
   //     expect(result).not.toBeNull();
   //   });
 
-  it("should should return 401 if client is not logged in", async () => {
+  it(" should return 401 if client is not logged in", async () => {
     const res = await request(server)
       .post("/api/returns")
       .send({ customerId, movieId });
@@ -51,14 +51,14 @@ describe("/api/returns", () => {
     expect(res.status).toBe(401);
   });
 
-  it("should should return 400 if customerId is not provided", async () => {
+  it(" should return 400 if customerId is not provided", async () => {
     customerId = "";
     const res = await exec();
 
     expect(res.status).toBe(400);
   });
 
-  it("should should return 400 if movieId is not provided", async () => {
+  it(" should return 400 if movieId is not provided", async () => {
     const token = new User().generateAuthToken();
     const res = await request(server)
       .post("/api/returns")
@@ -68,19 +68,32 @@ describe("/api/returns", () => {
     expect(res.status).toBe(400);
   });
 
-  it("should should return 404 if no rental found for the customer/movie", async () => {
+  it(" should return 404 if no rental found for the customer/movie", async () => {
     await Rental.remove({});
     const res = await exec();
 
     expect(res.status).toBe(404);
   });
 
-  it("should should return 400 if return is already processed", async () => {
-    rental.daterReturned = new Date();
+  it(" should return 400 if return is already processed", async () => {
+    rental.dateReturned = new Date();
 
     await rental.save();
     const res = await exec();
 
     expect(res.status).toBe(400);
+  });
+
+  it("should return 200 if we have a valid request", async () => {
+    const res = await exec();
+
+    expect(res.status).toBe(200);
+  });
+
+  it(" should set the returnDate if input is valid", async () => {
+    const res = await exec();
+    const rentalInDb = await Rental.findById(rental._id);
+    const diff = new Date() - rentalInDb.dateReturned;
+    expect(diff).toBeLessThan(10 * 1000);
   });
 });
