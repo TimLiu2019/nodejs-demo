@@ -1,6 +1,7 @@
 const moment = require("moment");
 const request = require("supertest");
 const { Rental } = require("../../models/rental");
+const { Movie } = require("../../models/movie");
 const { User } = require("../../models/user");
 const mongoose = require("mongoose");
 describe("/api/returns", () => {
@@ -9,6 +10,7 @@ describe("/api/returns", () => {
   let movieId;
   let rental;
   let token;
+  let movie;
   const exec = () => {
     return request(server)
       .post("/api/returns")
@@ -20,6 +22,14 @@ describe("/api/returns", () => {
     customerId = mongoose.Types.ObjectId();
     movieId = mongoose.Types.ObjectId();
     token = new User().generateAuthToken();
+    movie = new Movie({
+      _id: movieId,
+      title: "12345",
+      dailyRentalRate: 2,
+      genre: { name: "12345" },
+      numberInStock: 10
+    });
+    await movie.save();
     rental = new Rental({
       customer: {
         _id: customerId,
@@ -28,7 +38,7 @@ describe("/api/returns", () => {
       },
       movie: {
         _id: movieId,
-        title: "movie title",
+        title: "12345",
         dailyRentalRate: 2
       }
     });
@@ -38,6 +48,7 @@ describe("/api/returns", () => {
     await server.close();
     //remove all
     await Rental.remove({});
+    await Movie.remove({});
   });
   //   it("should work!", async () => {
   //     const result = await Rental.findById(rental._id);
@@ -99,10 +110,18 @@ describe("/api/returns", () => {
   });
 
   it("should set the rentalFee if input is valid", async () => {
-    rental.dateOut = moment().add(-7, "days").toDate();
+    rental.dateOut = moment()
+      .add(-7, "days")
+      .toDate();
     await rental.save();
     const res = await exec();
     const rentalInDb = await Rental.findById(rental._id);
     expect(rentalInDb.rentalFee).toBeDefined();
+  });
+
+  it("should increase the movie stock if input is valid", async () => {
+    const res = await exec();
+    const movieInDb = await Movie.findById(movieId);
+    expect(movieInDb.numberInStock).toBe(11);
   });
 });
